@@ -5,7 +5,10 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
 import torchvision.models as models
-from fastai.vision import load_learner, Image
+import fastai
+from fastai.vision import load_learner, Image, get_transforms
+
+#torch.nn.Module.dump_patches = True
 
 # В данном классе мы хотим полностью производить всю обработку картинок, которые поступают к нам из телеграма.
 # Это всего лишь заготовка, поэтому не стесняйтесь менять имена функций, добавлять аргументы, свои классы и
@@ -13,7 +16,7 @@ from fastai.vision import load_learner, Image
 class ClassPredictor:
     def __init__(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_learner("../model/LEGO brick images")
+        self.model = load_learner("/home/alex/dogs_dataset/")
         self.to_tensor = transforms.ToTensor()
 
     def predict(self, img_stream):
@@ -39,5 +42,12 @@ class ClassPredictor:
         # используем PIL, чтобы получить картинку из потока и изменить размер
         image = PIL_Image.open(img_stream).resize((256, 256))
         # переводим картинку в тензор и оборачиваем в объект Image, который использует fastai у себя внутри
-        image = Image(self.to_tensor(image))
+        image = fastai.vision.Image(self.to_tensor(image))
+        tfms = get_transforms(do_flip=True,
+                     flip_vert=False,
+                     max_rotate=10.0,
+                     max_zoom=0.5,
+                     max_lighting=0.9,
+                     max_warp=0.2)
+        image.apply_tfms(tfms[0], size=256)
         return image

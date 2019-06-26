@@ -23,19 +23,27 @@ def send_prediction_on_photo(bot, update):
     class_ = model.predict(image_stream)
 
     # теперь отправим результат
-    update.message.reply_text(str(class_))
-    print("Sent Answer to user, predicted: {}".format(class_))
+    update.message.reply_text(classes[str(class_)])
+    print ("Sent Answer to user, predicted: {}".format(class_))
 
+
+
+from telegram.ext import Updater, MessageHandler, Filters
+import requests
+import re
+import logging
+
+def main():
+  logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO)
+    # используем прокси, так как без него у меня ничего не работало(
+  updater = Updater(token=token)
+  updater.dispatcher.add_handler(MessageHandler(Filters.photo, send_prediction_on_photo))
+  updater.start_polling()
+  updater.idle()
 
 if __name__ == '__main__':
-    from telegram.ext import Updater, MessageHandler, Filters
-    import logging
+    main()
 
-    # Включим самый базовый логгинг, чтобы видеть сообщения об ошибках
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO)
-    # используем прокси, так как без него у меня ничего не работало(
-    updater = Updater(token=token)
-    updater.dispatcher.add_handler(MessageHandler(Filters.photo, send_prediction_on_photo))
-    updater.start_polling()
+
