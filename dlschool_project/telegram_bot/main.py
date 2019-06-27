@@ -38,12 +38,16 @@ def start(bot, update):
     print("Use /start {}".format(chat_id))
     
     update.message.reply_text(reply_texts['start_message'])
-    #update.message.reply_text(reply_texts['start_message_2'])
+    update.message.reply_text(reply_texts['start_message_2'])
     update.message.reply_text(reply_texts['start_message_3'])
     
 def dogs(bot, update):
     chat_id = update.message.chat_id
-    print("Use /start {}".format(chat_id))
+    print("Use /dogs {}".format(chat_id))
+
+    update.message.reply_text(reply_texts['dogs_1'])
+    update.message.reply_text(reply_texts['dogs_2'])
+    update.message.reply_text(reply_texts['dogs_3'])
 
   
     
@@ -63,7 +67,7 @@ def main():
   updater = Updater(token=token, request_kwargs=REQUEST_KWARGS)
   updater.dispatcher.add_handler(MessageHandler(Filters.photo, send_prediction_on_photo))
   updater.dispatcher.add_handler(CommandHandler('start', start))
-  #updater.dispatcher.add_handler(CommandHandler('dogs', dogs))
+  updater.dispatcher.add_handler(CommandHandler('dogs', dogs))
   updater.start_polling()
   updater.idle()
 
