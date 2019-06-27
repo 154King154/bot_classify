@@ -1,4 +1,5 @@
 from PIL import Image as PIL_Image
+from config import path_model
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -16,7 +17,7 @@ from fastai.vision import load_learner, Image, get_transforms
 class ClassPredictor:
     def __init__(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_learner("/home/alex/dlschool_project/dlschool_project/model/exp_resnet")
+        self.model = load_learner(path_model)
         self.to_tensor = transforms.ToTensor()
 
     def predict(self, img_stream):
