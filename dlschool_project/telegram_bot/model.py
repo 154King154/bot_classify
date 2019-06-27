@@ -16,7 +16,7 @@ from fastai.vision import load_learner, Image, get_transforms
 class ClassPredictor:
     def __init__(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = load_learner("/home/alex/dogs_dataset/")
+        self.model = load_learner("/home/alex/dlschool_project/dlschool_project/model/exp_resnet")
         self.to_tensor = transforms.ToTensor()
 
     def predict(self, img_stream):
